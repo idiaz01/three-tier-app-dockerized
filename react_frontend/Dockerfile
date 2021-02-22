@@ -11,7 +11,7 @@ COPY package.json /webapp/package.json
 
 
 RUN npm install --silent
-RUN npm install react-scripts -g --silent
+#RUN npm install react-scripts -g --silent
 
 ADD . /webapp
 
