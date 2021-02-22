@@ -28,8 +28,8 @@ services:
       MONGO_INITDB_DATABASE: "application"
       MONGODB_DATA_DIR: /data/mongodb
     volumes:
+      - ./mongo-entrypoint:/docker-entrypoint-initdb.d
       - mongodb_volume:/data/mongodb
-      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     networks:
       - backend
 
