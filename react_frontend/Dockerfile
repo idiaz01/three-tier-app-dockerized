@@ -7,8 +7,7 @@ WORKDIR /webapp
 
 ENV PATH /webapp/node_modules/.bin:$PATH
 
-COPY package.json /webapp/package.json
-
+COPY package*.json /webapp/
 
 RUN npm install --silent
 #RUN npm install react-scripts -g --silent

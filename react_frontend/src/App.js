@@ -1,25 +1,37 @@
-import logo from './logo.svg';
+import React, { Component } from 'react';
+import axios from 'axios';
+
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const apiUrl = 'http://localhost:5000/api';
+
+class App extends Component {
+  state = {
+    todos: []
+  };
+
+  async getTodos() {
+    const res = await axios.get(apiUrl);
+    this.setState({
+      todos: res.data
+    })
+  }
+  render() {
+    return (
+      <div className="App">
+        <h1>This is a test webapp</h1>
+        <h2>I am reading this from a Flask API connected to MongoDB: </h2>
+        <button onClick={() => this.getTodos()}>Get data</button>
+        <h2>Todo list: </h2>
+        {this.state.todos.map(todo => (
+          <div>
+            <h3>{todo.title}</h3>
+            <p>{todo.text}</p>
+          </div>
+        ))}
+      </div>
+    );
+  }
 }
 
 export default App;
