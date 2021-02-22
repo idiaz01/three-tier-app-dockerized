@@ -1,0 +1,67 @@
+version: "3.7"
+services:
+  client:
+    build:
+      context: ./react_frontend
+      dockerfile: Dockerfile
+
+    tty: true
+    ports:
+      - "3000:3000"
+
+    volumes:
+      - ./react_frontend:/webapp
+      - /webapp/node_modules
+
+    networks:
+      - frontend
+
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    restart: unless-stopped
+    command: mongo --auth
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "admin"
+      MONGO_INITDB_ROOT_PASSWORD: "testpassword"
+      MONGO_INITDB_DATABASE: "application"
+      MONGODB_DATA_DIR: /data/mongodb
+    volumes:
+      - mongodb_volume:/data/mongodb
+    networks:
+      - backend
+
+  flask_api:
+    build:
+      context: ./flask_backend
+      dockerfile: Dockerfile
+    command: gunicorn --bind 0.0.0.0:5000 webapp:webapp
+    ports:
+      - "5000:5000"
+
+    environment:
+      MONGODB_HOST: mongodb
+      MONGODB_USERNAME: "flask_api"
+      MONGODB_PASSWORD: "anotherpassword"
+
+    volumes:
+      - webapp_volume:/var/www/
+
+    depends_on:
+      - mongodb
+    networks:
+      - frontend
+      - backend
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
+
+volumes:
+  mongodb_volume:
+    driver: local
+
+  webapp_volume:
+    driver: local
