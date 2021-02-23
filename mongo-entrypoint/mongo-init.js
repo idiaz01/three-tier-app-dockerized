@@ -1,4 +1,4 @@
-db = getSibling('application')
+db = db.getSiblingDB('application');
 db.createUser(
     {
         user: "flask_api",

@@ -20,7 +20,7 @@ class App extends Component {
     return (
       <div className="App">
         <h1>This is a test webapp</h1>
-        <h2>I am reading this from a Flask API connected to MongoDB: </h2>
+        <h2>I will read the data from Flask API connected to MongoDB: </h2>
         <button onClick={() => this.getTodos()}>Get data</button>
         <h2>Todo list: </h2>
         {this.state.todos.map(todo => (

@@ -1,0 +1,16 @@
+FROM node:latest
+
+EXPOSE 3000
+EXPOSE 35729
+
+WORKDIR /webapp
+
+ENV PATH /webapp/node_modules/.bin:$PATH
+
+COPY package*.json /webapp/
+
+RUN npm install --silent
+
+ADD . /webapp
+
+CMD ["npm", "start"]
