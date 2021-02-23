@@ -9,10 +9,13 @@ from flask_cors import CORS
 app = Flask(__name__)
 cors = CORS(app, resources={r"/api": {"origins": "*"}})
 
+with open(os.environ['MONGODB_PASSWORD_FILE'], 'r') as pwd_file:
+    mongodb_api_pwd = pwd_file.read()
+
 app.config['MONGODB_SETTINGS'] = {
     'host': os.environ['MONGODB_HOST'],
     'username': os.environ['MONGODB_USERNAME'],
-    'password': os.environ['MONGODB_PASSWORD'],
+    'password': mongodb_api_pwd,
     'db': 'application'
 }
 

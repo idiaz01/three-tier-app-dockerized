@@ -8,7 +8,7 @@ services:
 
     tty: true
     ports:
-      - "80:80"
+      - "8080:80"
 
     volumes:
       - ./react_frontend:/webapp
@@ -24,7 +24,7 @@ services:
     container_name: mongodb
     environment:
       MONGO_INITDB_ROOT_USERNAME: "admin"
-      MONGO_INITDB_ROOT_PASSWORD: "password"
+      MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/mongodb_root_pwd
       MONGO_INITDB_DATABASE: "application"
       MONGODB_DATA_DIR: /data/mongodb
     volumes:
@@ -32,6 +32,8 @@ services:
       - mongodb_volume:/data/mongodb
     networks:
       - backend
+    secrets:
+      - mongodb_root_pwd
 
   flask_api:
     build:
@@ -44,22 +46,30 @@ services:
     environment:
       MONGODB_HOST: mongodb
       MONGODB_USERNAME: "flask_api"
-      MONGODB_PASSWORD: "anotherpassword"
+      MONGODB_PASSWORD_FILE: /run/secrets/mongodb_api_user_pwd
 
     volumes:
       - webapp_volume:/var/www/
-
     depends_on:
       - mongodb
     networks:
       - frontend
       - backend
+    secrets:
+      - mongodb_api_user_pwd
 
 networks:
   frontend:
     driver: bridge
   backend:
     driver: bridge
+
+secrets:
+  mongodb_root_pwd:
+    file: .mongo_db_root_pwd
+
+  mongodb_api_user_pwd:
+    file: .mongo_api_user_pwd
 
 volumes:
   mongodb_volume:
